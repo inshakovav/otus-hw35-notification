@@ -1,6 +1,6 @@
-package com.example.order;
+package com.example.payment;
 
-import com.example.order.dto.OrderCreatedDto;
+import com.example.payment.dto.OrderCreatedDto;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -17,7 +17,7 @@ public class KafkaConsumer {
     private String payload;
     private OrderCreatedDto receivedMessage;
 
-    @KafkaListener(topics = "my-topic2", groupId = "my-group")
+    @KafkaListener(topics = "hw30.order.created", groupId = "my-group")
     public void receive(OrderCreatedDto message) {
         log.info("received payload='{}'", message.toString());
 //        payload = message.toString();

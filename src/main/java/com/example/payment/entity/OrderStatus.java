@@ -1,4 +1,4 @@
-package com.example.order.entity;
+package com.example.payment.entity;
 
 public enum OrderStatus {
     PENDING,

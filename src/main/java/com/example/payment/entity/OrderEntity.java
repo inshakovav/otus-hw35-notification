@@ -1,4 +1,4 @@
-package com.example.order.entity;
+package com.example.payment.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;

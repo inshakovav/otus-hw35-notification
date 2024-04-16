@@ -1,8 +1,6 @@
-package com.example.order.dto;
+package com.example.payment.dto;
 
 import lombok.Data;
-
-import java.io.Serializable;
 
 @Data
 public class OrderCreatedDto {
