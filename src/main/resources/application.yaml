@@ -1,9 +1,9 @@
 server:
-  port: 8081
+  port: 8082
 
 spring:
   application:
-    name: order
+    name: payment
 
   datasource:
     url: jdbc:postgresql://my-release-postgresql.default.svc.cluster.local:5432/db_otus_30
@@ -13,7 +13,7 @@ spring:
       leak-detection-threshold: 10000
   flyway:
     enabled: true
-    schemas: order_scheme
+    schemas: payment_scheme
 
   kafka:
     bootstrap-servers: localhost:29092
