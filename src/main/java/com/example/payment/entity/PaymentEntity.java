@@ -9,14 +9,14 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "order", schema = "payment_scheme")
+@Table(name = "payment", schema = "payment_scheme")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @ToString
-public class OrderEntity {
+public class PaymentEntity {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -28,8 +28,8 @@ public class OrderEntity {
     @UpdateTimestamp
     private Timestamp updatedAt;
 
-    private String name;
-
     @Enumerated(EnumType.STRING)
-    private OrderStatus status;
+    private PaymentStatus status;
+
+    private Long orderId;
 }

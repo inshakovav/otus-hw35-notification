@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class PaymentServiceTest {
-    PaymentService paymentService = new PaymentService();
+    PaymentService paymentService = new PaymentService(null, null, null);
 
     @Test
     void testExecutePayment_whenOrderIdNotDivisibleBy5_thenReturnTrue() {

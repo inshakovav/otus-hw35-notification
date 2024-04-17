@@ -1,8 +1,11 @@
 package com.example.payment;
 
 import com.example.payment.dto.OrderCreatedMessage;
+import com.example.payment.dto.PaymentExecutedMessage;
+import com.example.payment.dto.PaymentRejectedMessage;
+import com.example.payment.entity.PaymentEntity;
 import com.example.payment.kafka.KafkaProducerService;
-import com.example.payment.repository.OrderRepository;
+import com.example.payment.repository.PaymentRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,20 +28,21 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class OrderApplicationTests {
 
     @Autowired
-    OrderRepository orderRepository;
+    PaymentRepository paymentRepository;
 
     @Autowired
     private WebApplicationContext wac;
 
     @Autowired
-    private KafkaConsumer consumer;
+    private KafkaPaymentConsumer paymentConsumer;
+
+    @Autowired
+    private KafkaOrderProducer kafkaOrderProducer;
 
     // To disable second @KafkaListener
 //    @MockBean
 //    KafkaConsumerService kafkaConsumerService;
 
-    @Autowired
-    private KafkaProducer kafkaProducer;
 
     @Autowired
     private KafkaProducerService kafkaProducerService;
@@ -51,33 +55,27 @@ class OrderApplicationTests {
                 .build();
     }
 
-//    @Test
-//    void createOrder() throws Exception {
-//        // before
-//        OrderCreatedMessage orderCreatedMessage = new OrderCreatedMessage();
-//        orderCreatedMessage.setOrderId(12L);
-//        orderCreatedMessage.setOrderName("OrderPendingPayment_name");
-//
-//        // act
-//        kafkaProducer.sendOrder(orderCreatedMessage);
-//
-//        // verify
-//        boolean messageConsumed = consumer.getLatch().await(10, TimeUnit.SECONDS);
-//        assertTrue(messageConsumed);
-//
-//        OrderCreatedMessage receivedMessage = consumer.getReceivedMessage();
-//        assertEquals(receivedMessage.getOrderId(), orderCreatedMessage.getOrderId());
-//        assertEquals(receivedMessage.getOrderName(), orderCreatedMessage.getOrderName());
-//    }
-
     @Test
     void orderReceiveTest() throws InterruptedException {
+        // setup
         OrderCreatedMessage orderCreatedMessage = new OrderCreatedMessage();
         orderCreatedMessage.setOrderId(15L);
         orderCreatedMessage.setOrderDescription("OrderPendingPayment_name");
-        kafkaProducerService.sendOrder(orderCreatedMessage);
+
+        // act
+        kafkaOrderProducer.sendOrder(orderCreatedMessage);
         sleep(5000);
-//        boolean messageConsumed = consumer.getLatch().await(10, TimeUnit.SECONDS);
-//        assertTrue(messageConsumed);
+
+        // verify
+        PaymentEntity lastOrder = paymentRepository.findFirstByOrderByIdDesc();
+        log.info("Last record={}", lastOrder);
+        boolean messageConsumed = paymentConsumer.getLatch().await(10, TimeUnit.SECONDS);
+        assertTrue(messageConsumed);
+
+        PaymentExecutedMessage executedMessage = paymentConsumer.getExecutedMessage();
+        log.info("Execute message: {}", executedMessage);
+
+        PaymentRejectedMessage rejectedMessage = paymentConsumer.getRejectedMessage();
+        log.info("Rejected message: {}", rejectedMessage);
     }
 }

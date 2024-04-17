@@ -16,11 +16,7 @@ public class KafkaConsumerService {
 
     @KafkaListener(topics = "hw30.order.created", groupId = "my-group")
     public void receiveOrderCreatedMessage(OrderCreatedMessage message) {
-        boolean isPaymentSuccess = paymentService.executePayment(message.getOrderId());
-        if (isPaymentSuccess) {
-            log.info("Order successfully paid: {}", message);
-        } else {
-            log.warn("Order NOT paid: {}", message);
-        }
+        paymentService.executePayment(message.getOrderId());
+
     }
 }

@@ -1,6 +1,6 @@
 package com.example.payment.entity;
 
-public enum OrderStatus {
+public enum PaymentStatus {
     PENDING,
     REJECTED_BY_PAYMENT,
     REJECTED_BY_WAREHOUSE,
