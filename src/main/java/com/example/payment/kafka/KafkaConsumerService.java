@@ -16,7 +16,7 @@ public class KafkaConsumerService {
 
     @KafkaListener(topics = "hw30.order.created", groupId = "my-group")
     public void receiveOrderCreatedMessage(OrderCreatedMessage message) {
-        paymentService.executePayment(message.getOrderId());
+        paymentService.process(message);
 
     }
 }

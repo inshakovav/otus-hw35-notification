@@ -1,6 +1,5 @@
 package com.example.payment;
 
-import com.example.payment.dto.OrderCreatedMessage;
 import com.example.payment.dto.PaymentExecutedMessage;
 import com.example.payment.dto.PaymentRejectedMessage;
 import lombok.Getter;
@@ -13,18 +12,10 @@ import java.util.concurrent.CountDownLatch;
 @Component
 @Slf4j
 @Getter
-public class KafkaPaymentConsumer {
+public class KafkaRejectedConsumer {
 
     private CountDownLatch latch = new CountDownLatch(1);
-    private PaymentExecutedMessage executedMessage;
     private PaymentRejectedMessage rejectedMessage;
-
-    @KafkaListener(topics = "hw30.payment.succeeded", groupId = "my-group")
-    public void receiveSucceeded(PaymentExecutedMessage message) {
-        log.info("received Executed payload='{}'", message.toString());
-        executedMessage = message;
-        latch.countDown();
-    }
 
     @KafkaListener(topics = "hw30.payment.rejected", groupId = "my-group")
     public void receiveRejected(PaymentRejectedMessage message) {

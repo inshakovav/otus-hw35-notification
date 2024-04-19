@@ -34,7 +34,10 @@ class OrderApplicationTests {
     private WebApplicationContext wac;
 
     @Autowired
-    private KafkaPaymentConsumer paymentConsumer;
+    private KafkaSucceededConsumer kafkaSucceededConsumer;
+
+    @Autowired
+    private KafkaRejectedConsumer kafkaRejectedConsumer;
 
     @Autowired
     private KafkaOrderProducer kafkaOrderProducer;
@@ -59,7 +62,7 @@ class OrderApplicationTests {
     void orderReceiveTest() throws InterruptedException {
         // setup
         OrderCreatedMessage orderCreatedMessage = new OrderCreatedMessage();
-        orderCreatedMessage.setOrderId(15L);
+        orderCreatedMessage.setOrderId(16L);
         orderCreatedMessage.setOrderDescription("OrderPendingPayment_name");
 
         // act
@@ -69,13 +72,18 @@ class OrderApplicationTests {
         // verify
         PaymentEntity lastOrder = paymentRepository.findFirstByOrderByIdDesc();
         log.info("Last record={}", lastOrder);
-        boolean messageConsumed = paymentConsumer.getLatch().await(10, TimeUnit.SECONDS);
-        assertTrue(messageConsumed);
 
-        PaymentExecutedMessage executedMessage = paymentConsumer.getExecutedMessage();
+//        boolean messageConsumed = kafkaSucceededConsumer.getLatch().await(10, TimeUnit.SECONDS);
+//        assertTrue(messageConsumed);
+//        PaymentExecutedMessage executedMessage = kafkaSucceededConsumer.getExecutedMessage();
+//        log.info("Execute message: {}", executedMessage);
+
+        boolean messageConsumed = kafkaRejectedConsumer.getLatch().await(10, TimeUnit.SECONDS);
+        assertTrue(messageConsumed);
+        PaymentRejectedMessage executedMessage = kafkaRejectedConsumer.getRejectedMessage();
         log.info("Execute message: {}", executedMessage);
 
-        PaymentRejectedMessage rejectedMessage = paymentConsumer.getRejectedMessage();
-        log.info("Rejected message: {}", rejectedMessage);
+//        PaymentRejectedMessage rejectedMessage = paymentConsumer.getRejectedMessage();
+//        log.info("Rejected message: {}", rejectedMessage);
     }
 }

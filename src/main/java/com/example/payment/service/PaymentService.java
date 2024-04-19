@@ -21,7 +21,7 @@ public class PaymentService {
     private final OrderCreatedMapper orderCreatedMapper;
     private final KafkaProducerService kafkaProducerService;
 
-    void process(OrderCreatedMessage message) {
+    public void process(OrderCreatedMessage message) {
         PaymentEntity paymentEntity = saveToDb(message);
         boolean isPaymentSuccess = executePayment(message.getOrderId());
         sendPaymentResult(message, paymentEntity, isPaymentSuccess);
