@@ -1,10 +1,11 @@
 package com.example.payment.dto;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
-@Data
-@Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class PaymentRejectedMessage {
     private Long orderId;
     private Long paymentId;
