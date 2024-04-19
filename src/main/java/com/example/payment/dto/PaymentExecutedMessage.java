@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 public class PaymentExecutedMessage {
     private Long orderId;
     private String orderDescription;

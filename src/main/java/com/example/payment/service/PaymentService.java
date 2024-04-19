@@ -1,6 +1,5 @@
 package com.example.payment.service;
 
-import com.example.payment.dto.OrderCreatedMapper;
 import com.example.payment.dto.OrderCreatedMessage;
 import com.example.payment.dto.PaymentExecutedMessage;
 import com.example.payment.dto.PaymentRejectedMessage;
@@ -18,7 +17,7 @@ import org.springframework.stereotype.Service;
 public class PaymentService {
 
     private final PaymentRepository paymentRepository;
-    private final OrderCreatedMapper orderCreatedMapper;
+//    private final OrderCreatedMapper orderCreatedMapper;
     private final KafkaProducerService kafkaProducerService;
 
     public void process(OrderCreatedMessage message) {
@@ -50,8 +49,9 @@ public class PaymentService {
     }
 
     public PaymentEntity saveToDb(OrderCreatedMessage message) {
-        PaymentEntity entity = orderCreatedMapper.OrderCreatedToDb(message);
+        PaymentEntity entity = new PaymentEntity();
         entity.setStatus(PaymentStatus.PENDING);
+        entity.setOrderId(message.getOrderId());
         PaymentEntity dbEntity = paymentRepository.save(entity);
         return dbEntity;
     }

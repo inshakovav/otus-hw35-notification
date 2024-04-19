@@ -6,6 +6,8 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@ToString
 public class PaymentRejectedMessage {
     private Long orderId;
     private Long paymentId;
