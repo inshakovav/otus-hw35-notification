@@ -18,7 +18,7 @@ public class KafkaConsumerService {
         try {
             paymentService.process(message);
         } catch (Exception e) {
-            log.warn("Kafka unknown error processing: ", message);
+            log.warn("Kafka unknown error Order processing: ", message);
         }
 
     }
