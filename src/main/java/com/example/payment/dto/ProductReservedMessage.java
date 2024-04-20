@@ -2,19 +2,15 @@ package com.example.payment.dto;
 
 import lombok.*;
 
-import java.math.BigDecimal;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @ToString
-public class OrderCreatedMessage {
+public class ProductReservedMessage {
     private Long orderId;
     private String orderDescription;
-    private Long productId;
-    private BigDecimal productPrice;
-    private BigDecimal productQuantity;
     private String deliveryAddress;
+    private Long reservationId;
 }

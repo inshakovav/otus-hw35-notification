@@ -1,7 +1,6 @@
 package com.example.payment.kafka;
 
 import com.example.payment.dto.DeliveryRejectedMessage;
-import com.example.payment.dto.PaymentRejectedMessage;
 import com.example.payment.dto.WarehouseReservationRejectedMessage;
 import com.example.payment.service.SageCompensationService;
 import lombok.RequiredArgsConstructor;
@@ -16,16 +15,7 @@ public class KafkaConsumerSagaCompensationService {
 
     private final SageCompensationService sageCompensationService;
 
-    @KafkaListener(topics = "${payment.kafka.payment-rejected-topic}", groupId = "${payment.kafka.message-group-name}")
-    public void receivePaymentRejected(PaymentRejectedMessage message) {
-        try {
-            sageCompensationService.executePaymentReject(message);
-        } catch (Exception e) {
-            log.warn("Kafka unknown error Order processing: ", message);
-        }
-    }
-
-    @KafkaListener(topics = "${payment.kafka.warehouse-rejected-topic}", groupId = "${payment.kafka.message-group-name}")
+    @KafkaListener(topics = "${warehouse.kafka.warehouse-product-reservation-rejected-topic}", groupId = "${warehouse.kafka.message-group-name}")
     public void receiveWarehouseRejected(WarehouseReservationRejectedMessage message) {
         try {
             sageCompensationService.executeWarehouseReject(message);
@@ -34,7 +24,7 @@ public class KafkaConsumerSagaCompensationService {
         }
     }
 
-    @KafkaListener(topics = "${payment.kafka.delivery-rejected-topic}", groupId = "${payment.kafka.message-group-name}")
+    @KafkaListener(topics = "${warehouse.kafka.delivery-rejected-topic}", groupId = "${warehouse.kafka.message-group-name}")
     public void receiveDeliveryRejected(DeliveryRejectedMessage message) {
         try {
             sageCompensationService.executeDeliveryReject(message);

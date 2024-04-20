@@ -1,9 +1,7 @@
 package com.example.payment.kafka;
 
-import com.example.payment.dto.OrderCreatedMessage;
-import com.example.payment.dto.PaymentExecutedMessage;
-import com.example.payment.dto.PaymentRejectedMessage;
-import com.example.payment.entity.PaymentEntity;
+import com.example.payment.dto.ProductReservedMessage;
+import com.example.payment.dto.WarehouseReservationRejectedMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -12,19 +10,19 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class KafkaProducerService {
-    @Value("${payment.kafka.payment-succeeded-topic}")
-    private String paymentSucceededTopic;
+    @Value("${warehouse.kafka.warehouse-product-reserved-topic}")
+    private String productReservedTopic;
 
-    @Value("${payment.kafka.payment-rejected-topic}")
-    private String paymentRejectedTopic;
+    @Value("${warehouse.kafka.warehouse-product-reservation-rejected-topic}")
+    private String productReservationRejectedTopic;
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
-    public void sendSucceededPayment(PaymentExecutedMessage message) {
-        kafkaTemplate.send(paymentSucceededTopic, message);
+    public void sendProductReserved(ProductReservedMessage message) {
+        kafkaTemplate.send(productReservedTopic, message);
     }
 
-    public void sendRejectedPayment(PaymentRejectedMessage message) {
-        kafkaTemplate.send(paymentRejectedTopic, message);
+    public void sendProductReservationRejected(WarehouseReservationRejectedMessage message) {
+        kafkaTemplate.send(productReservationRejectedTopic, message);
     }
 }

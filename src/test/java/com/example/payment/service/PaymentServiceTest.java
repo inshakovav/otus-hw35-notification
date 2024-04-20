@@ -1,22 +1,23 @@
 package com.example.payment.service;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class PaymentServiceTest {
-    PaymentService paymentService = new PaymentService(null, null);
+    WarehouseService paymentService = new WarehouseService(null, null);
 
-    @Test
-    void testExecutePayment_whenOrderIdNotDivisibleBy5_thenReturnTrue() {
-
-        boolean result = paymentService.executePayment(Long.valueOf(1));
-        Assertions.assertEquals(true, result);
+    @ParameterizedTest
+    @ValueSource(ints = {1, 2, 3, 4, 5, 7, 8})
+    void reserveProduct_whenOrderIdNotDivisibleBy5plus4_thenReturnTrue(long orderId) {
+        boolean result = paymentService.reserveProduct(orderId);
+        Assertions.assertTrue(result);
     }
 
-    @Test
-    void testExecutePayment_whenOrderIdDivisibleBy5_thenReturnFalse() {
-
-        boolean result = paymentService.executePayment(Long.valueOf(15));
-        Assertions.assertEquals(false, result);
+    @ParameterizedTest
+    @ValueSource(ints = {6, 11, 16})
+    void reserveProduct_whenOrderIdDivisibleBy5plus4_thenReturnFalse(long orderId) {
+        boolean result = paymentService.reserveProduct(orderId);
+        Assertions.assertFalse(result);
     }
 }

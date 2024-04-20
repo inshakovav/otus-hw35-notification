@@ -1,11 +1,9 @@
 package com.example.payment.service;
 
 import com.example.payment.dto.DeliveryRejectedMessage;
-import com.example.payment.dto.PaymentRejectedMessage;
 import com.example.payment.dto.WarehouseReservationRejectedMessage;
-import com.example.payment.entity.PaymentEntity;
-import com.example.payment.entity.PaymentStatus;
-import com.example.payment.repository.PaymentRepository;
+import com.example.payment.entity.ProductReservationEntity;
+import com.example.payment.repository.ProductReservedRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,34 +14,24 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class SageCompensationService {
 
-    private final PaymentRepository paymentRepository;
-
-    @Transactional
-    public void executePaymentReject(PaymentRejectedMessage message) {
-        PaymentEntity order = findPaymentByOrderId(message.getOrderId());
-        log.info("Payment was rejected: {}", message);
-        payment.setStatus(PaymentStatus.REJECTED_BY_PAYMENT);
-        paymentRepository.save(payment);
-    }
+    private final ProductReservedRepository productReservedRepository;
 
     @Transactional
     public void executeWarehouseReject(WarehouseReservationRejectedMessage message) {
-        PaymentEntity payment = findPaymentByOrderId(message.getOrderId());
-        log.info("Warehouse reservation was rejected: {}", message);
-        payment.setStatus(PaymentStatus.REJECTED_BY_WAREHOUSE);
-        paymentRepository.save(payment);
+        ProductReservationEntity payment = findPaymentByOrderId(message.getOrderId());
+        productReservedRepository.deleteById(payment.getId());
+        log.info("Delete reservation. Warehouse reservation was rejected: {}", message);
     }
 
     @Transactional
     public void executeDeliveryReject(DeliveryRejectedMessage message) {
-        PaymentEntity payment = findPaymentByOrderId(message.getOrderId());
-        log.info("Delivery was rejected: {}", message);
-        payment.setStatus(PaymentStatus.REJECTED_BY_DELIVERY);
-        paymentRepository.save(payment);
+        ProductReservationEntity payment = findPaymentByOrderId(message.getOrderId());
+        productReservedRepository.deleteById(payment.getId());
+        log.info("Delete reservation. Delivery was rejected: {}", message);
     }
 
-    private PaymentEntity findPaymentByOrderId(long orderId) {
-        return paymentRepository.findFirstByOrderId(orderId)
-                .orElseThrow(() -> new NumberFormatException("Wrong payment rejection. Can't find payment by payment id" + orderId));
+    private ProductReservationEntity findPaymentByOrderId(long orderId) {
+        return productReservedRepository.findFirstByOrderId(orderId)
+                .orElseThrow(() -> new NumberFormatException("Wrong product reservation rejection. Can't find product by order id" + orderId));
     }
 }
