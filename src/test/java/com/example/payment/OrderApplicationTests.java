@@ -44,22 +44,6 @@ class OrderApplicationTests {
     @Autowired
     private KafkaOrderProducer kafkaOrderProducer;
 
-    // To disable second @KafkaListener
-//    @MockBean
-//    KafkaConsumerService kafkaConsumerService;
-
-
-    @Autowired
-    private KafkaProducerService kafkaProducerService;
-
-    MockMvc mockMvc;
-
-    @BeforeEach
-    public void setup() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(wac)
-                .build();
-    }
-
     @Test
     void paymentSucceededTest() throws InterruptedException {
         // setup
