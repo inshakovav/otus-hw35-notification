@@ -13,10 +13,13 @@ import org.springframework.stereotype.Component;
 public class KafkaConsumerService {
 
     private final PaymentService paymentService;
-
-    @KafkaListener(topics = "hw30.order.created", groupId = "my-group")
+    @KafkaListener(topics = "${payment.kafka.order-created-topic}", groupId = "${payment.kafka.message-group-name}")
     public void receiveOrderCreatedMessage(OrderCreatedMessage message) {
-        paymentService.process(message);
+        try {
+            paymentService.process(message);
+        } catch (Exception e) {
+            log.warn("Kafka unknown error processing: ", message);
+        }
 
     }
 }
