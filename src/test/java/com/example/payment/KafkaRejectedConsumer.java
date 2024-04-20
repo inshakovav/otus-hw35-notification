@@ -17,7 +17,7 @@ public class KafkaRejectedConsumer {
     private CountDownLatch latch = new CountDownLatch(1);
     private PaymentRejectedMessage rejectedMessage;
 
-    @KafkaListener(topics = "hw30.payment.rejected", groupId = "my-group")
+    @KafkaListener(topics = "${payment.kafka.payment-rejected-topic}", groupId = "${payment.kafka.message-group-name}")
     public void receiveRejected(PaymentRejectedMessage message) {
         log.info("received Rejected payload='{}'", message.toString());
         rejectedMessage = message;

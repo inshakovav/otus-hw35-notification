@@ -17,7 +17,7 @@ public class KafkaSucceededConsumer {
     private CountDownLatch latch = new CountDownLatch(1);
     private PaymentExecutedMessage executedMessage;
 
-    @KafkaListener(topics = "hw30.payment.succeeded", groupId = "my-group")
+    @KafkaListener(topics = "${payment.kafka.payment-succeeded-topic}", groupId = "${payment.kafka.message-group-name}")
     public void receiveSucceeded(PaymentExecutedMessage message) {
         log.info("received Executed payload='{}'", message.toString());
         executedMessage = message;
