@@ -9,14 +9,14 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "product_reservation", schema = "warehouse_scheme")
+@Table(name = "delivery_reservation", schema = "delivery_scheme")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @ToString
-public class ProductReservationEntity {
+public class DeliveryReservationEntity {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -29,7 +29,7 @@ public class ProductReservationEntity {
     private Timestamp updatedAt;
 
     @Enumerated(EnumType.STRING)
-    private ProductStatus status;
+    private DeliveryStatus status;
 
     private Long orderId;
 }

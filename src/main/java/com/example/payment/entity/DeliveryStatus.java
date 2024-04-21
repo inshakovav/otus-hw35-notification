@@ -1,5 +1,5 @@
 package com.example.payment.entity;
 
-public enum ProductStatus {
+public enum DeliveryStatus {
     RESERVED
 }

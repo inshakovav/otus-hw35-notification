@@ -5,7 +5,6 @@ import com.example.payment.dto.ProductReservedMessage;
 import com.example.payment.dto.WarehouseReservationRejectedMessage;
 import com.example.payment.entity.ProductReservationEntity;
 import com.example.payment.entity.ProductStatus;
-import com.example.payment.kafka.KafkaConsumerSagaCompensationService;
 import com.example.payment.kafka.KafkaProducerService;
 import com.example.payment.repository.ProductReservedRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +14,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class WarehouseService {
+public class DeliveryService {
 
     private final ProductReservedRepository productReservedRepository;
     private final KafkaProducerService kafkaProducerService;

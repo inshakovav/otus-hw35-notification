@@ -1,4 +1,4 @@
-CREATE TABLE warehouse_scheme.product_reservation
+CREATE TABLE delivery_scheme.delivery_reservation
 (
     id         bigserial,
     created_at timestamp NOT NULL,

@@ -1,9 +1,9 @@
 server:
-  port: 8082
+  port: 8084
 
-warehouse:
+delivery:
   kafka:
-    message-group-name: warehouse-group
+    message-group-name: delivery-group
     order-created-topic: hw30.order.created
     payment-succeeded-topic: hw30.payment.succeeded
     payment-rejected-topic: hw30.payment.rejected
@@ -13,7 +13,7 @@ warehouse:
 
 spring:
   application:
-    name: warehouse
+    name: delivery
 
   datasource:
     url: jdbc:postgresql://my-release-postgresql.default.svc.cluster.local:5432/db_otus_30
@@ -23,7 +23,7 @@ spring:
       leak-detection-threshold: 10000
   flyway:
     enabled: true
-    schemas: warehouse_scheme
+    schemas: delivery_scheme
 
   kafka:
     bootstrap-servers: localhost:29092
