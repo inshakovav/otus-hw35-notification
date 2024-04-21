@@ -5,7 +5,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 class PaymentServiceTest {
-    WarehouseService paymentService = new WarehouseService(null, null);
+    WarehouseService paymentService = new WarehouseService(null, null, null);
 
     @ParameterizedTest
     @ValueSource(ints = {1, 2, 3, 4, 5, 7, 8})

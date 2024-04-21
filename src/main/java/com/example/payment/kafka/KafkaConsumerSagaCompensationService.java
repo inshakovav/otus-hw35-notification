@@ -15,14 +15,14 @@ public class KafkaConsumerSagaCompensationService {
 
     private final SageCompensationService sageCompensationService;
 
-    @KafkaListener(topics = "${warehouse.kafka.warehouse-product-reservation-rejected-topic}", groupId = "${warehouse.kafka.message-group-name}")
-    public void receiveWarehouseRejected(WarehouseReservationRejectedMessage message) {
-        try {
-            sageCompensationService.executeWarehouseReject(message);
-        } catch (Exception e) {
-            log.warn("Kafka unknown error Order processing: ", message);
-        }
-    }
+//    @KafkaListener(topics = "${warehouse.kafka.warehouse-product-reservation-rejected-topic}", groupId = "${warehouse.kafka.message-group-name}")
+//    public void receiveWarehouseRejected(WarehouseReservationRejectedMessage message) {
+//        try {
+//            sageCompensationService.executeWarehouseReject(message);
+//        } catch (Exception e) {
+//            log.warn("Kafka unknown error Order processing: ", message);
+//        }
+//    }
 
     @KafkaListener(topics = "${warehouse.kafka.delivery-rejected-topic}", groupId = "${warehouse.kafka.message-group-name}")
     public void receiveDeliveryRejected(DeliveryRejectedMessage message) {

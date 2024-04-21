@@ -5,6 +5,7 @@ import com.example.payment.dto.ProductReservedMessage;
 import com.example.payment.dto.WarehouseReservationRejectedMessage;
 import com.example.payment.entity.ProductReservationEntity;
 import com.example.payment.entity.ProductStatus;
+import com.example.payment.kafka.KafkaConsumerSagaCompensationService;
 import com.example.payment.kafka.KafkaProducerService;
 import com.example.payment.repository.ProductReservedRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,16 +19,17 @@ public class WarehouseService {
 
     private final ProductReservedRepository productReservedRepository;
     private final KafkaProducerService kafkaProducerService;
+    private final SageCompensationService sageCompensationService;
 
     public void process(PaymentExecutedMessage message) {
         ProductReservationEntity productReservationEntity = saveToDb(message);
         boolean isPaymentSuccess = reserveProduct(message.getOrderId());
-        sendPaymentResult(message, productReservationEntity, isPaymentSuccess);
+        sendReservationResult(message, productReservationEntity, isPaymentSuccess);
     }
 
-    private void sendPaymentResult(PaymentExecutedMessage message, ProductReservationEntity productReservationEntity, boolean isPaymentSuccess) {
+    private void sendReservationResult(PaymentExecutedMessage message, ProductReservationEntity productReservationEntity, boolean isPaymentSuccess) {
         if (isPaymentSuccess) {
-            log.info("Order successfully paid: {}", message);
+            log.info("Product successfully reserved: {}", message);
             ProductReservedMessage reservedMessage = ProductReservedMessage.builder()
                     .orderId(message.getOrderId())
                     .orderDescription(message.getOrderDescription())
@@ -36,13 +38,14 @@ public class WarehouseService {
                     .build();
             kafkaProducerService.sendProductReserved(reservedMessage);
         } else {
-            log.warn("Order NOT paid: {}", message);
+            log.warn("Product NOT reserved: {}", message);
             WarehouseReservationRejectedMessage rejectedMessage = WarehouseReservationRejectedMessage.builder()
                     .orderId(message.getOrderId())
                     .reservationId(productReservationEntity.getId())
                     .errorCode("Order id is 6 or 11 or 21 etc")
                     .build();
             kafkaProducerService.sendProductReservationRejected(rejectedMessage);
+            sageCompensationService.executeWarehouseReject(rejectedMessage);
         }
     }
 

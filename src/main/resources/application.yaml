@@ -3,7 +3,7 @@ server:
 
 warehouse:
   kafka:
-    message-group-name: payment-group
+    message-group-name: warehouse-group
     order-created-topic: hw30.order.created
     payment-succeeded-topic: hw30.payment.succeeded
     payment-rejected-topic: hw30.payment.rejected
