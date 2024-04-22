@@ -1,5 +1,6 @@
 package com.example.payment.entity;
 
 public enum DeliveryStatus {
-    RESERVED
+    DELIVERED,
+    REJECTED_BY_DELIVERY
 }

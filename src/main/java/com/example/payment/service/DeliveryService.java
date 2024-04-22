@@ -1,12 +1,12 @@
 package com.example.payment.service;
 
-import com.example.payment.dto.PaymentExecutedMessage;
+import com.example.payment.dto.DeliveryExecutedMessage;
+import com.example.payment.dto.DeliveryRejectedMessage;
 import com.example.payment.dto.ProductReservedMessage;
-import com.example.payment.dto.WarehouseReservationRejectedMessage;
-import com.example.payment.entity.ProductReservationEntity;
-import com.example.payment.entity.ProductStatus;
+import com.example.payment.entity.DeliveryReservationEntity;
+import com.example.payment.entity.DeliveryStatus;
 import com.example.payment.kafka.KafkaProducerService;
-import com.example.payment.repository.ProductReservedRepository;
+import com.example.payment.repository.DeliveryReservedRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,57 +16,60 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class DeliveryService {
 
-    private final ProductReservedRepository productReservedRepository;
+    private final DeliveryReservedRepository deliveryReservedRepository;
     private final KafkaProducerService kafkaProducerService;
-    private final SageCompensationService sageCompensationService;
+//    private final SageCompensationService sageCompensationService;
 
-    public void process(PaymentExecutedMessage message) {
-        ProductReservationEntity productReservationEntity = saveToDb(message);
-        boolean isPaymentSuccess = reserveProduct(message.getOrderId());
-        sendReservationResult(message, productReservationEntity, isPaymentSuccess);
-    }
-
-    private void sendReservationResult(PaymentExecutedMessage message, ProductReservationEntity productReservationEntity, boolean isPaymentSuccess) {
-        if (isPaymentSuccess) {
-            log.info("Product successfully reserved: {}", message);
-            ProductReservedMessage reservedMessage = ProductReservedMessage.builder()
-                    .orderId(message.getOrderId())
-                    .orderDescription(message.getOrderDescription())
-                    .deliveryAddress(message.getDeliveryAddress())
-                    .reservationId(productReservationEntity.getId())
-                    .build();
-            kafkaProducerService.sendProductReserved(reservedMessage);
+    public void process(ProductReservedMessage message) {
+        DeliveryReservationEntity deliveryReservationEntity;
+        boolean isDeliverySuccess = deliverProduct(message.getOrderId());
+        if (isDeliverySuccess) {
+            log.info("Product successfully delivered: {}", message);
+            deliveryReservationEntity = saveToDb(message, DeliveryStatus.DELIVERED);
+            sendDeliverySucceed(message, deliveryReservationEntity);
         } else {
-            log.warn("Product NOT reserved: {}", message);
-            WarehouseReservationRejectedMessage rejectedMessage = WarehouseReservationRejectedMessage.builder()
-                    .orderId(message.getOrderId())
-                    .reservationId(productReservationEntity.getId())
-                    .errorCode("Order id is 6 or 11 or 21 etc")
-                    .build();
-            kafkaProducerService.sendProductReservationRejected(rejectedMessage);
-            sageCompensationService.executeWarehouseReject(rejectedMessage);
+            log.warn("Product NOT delivered: {}", message);
+            deliveryReservationEntity = saveToDb(message, DeliveryStatus.REJECTED_BY_DELIVERY);
+            sendDeliveryRejected(message, deliveryReservationEntity);
         }
     }
 
-    public ProductReservationEntity saveToDb(PaymentExecutedMessage message) {
-        ProductReservationEntity entity = new ProductReservationEntity();
-        entity.setStatus(ProductStatus.RESERVED);
-        entity.setOrderId(message.getOrderId());
-        ProductReservationEntity dbEntity = productReservedRepository.save(entity);
+    private void sendDeliverySucceed(ProductReservedMessage productReservedMessage, DeliveryReservationEntity deliveryReservationEntity) {
+        DeliveryExecutedMessage deliveryExecutedMessage = DeliveryExecutedMessage.builder()
+                .orderId(productReservedMessage.getOrderId())
+                .deliveryId(deliveryReservationEntity.getId())
+                .build();
+        kafkaProducerService.sendDeliveryExecuted(deliveryExecutedMessage);
+    }
+
+    private void sendDeliveryRejected(ProductReservedMessage productReservedMessage, DeliveryReservationEntity deliveryReservationEntity) {
+        DeliveryRejectedMessage message = DeliveryRejectedMessage.builder()
+                .orderId(productReservedMessage.getOrderId())
+                .deliveryId(deliveryReservationEntity.getId())
+                .errorCode("Delivery rejected")
+                .build();
+        kafkaProducerService.sendDeliveryRejected(message);
+    }
+
+    public DeliveryReservationEntity saveToDb(ProductReservedMessage message, DeliveryStatus deliveryStatus) {
+        DeliveryReservationEntity entity = DeliveryReservationEntity.builder()
+                .orderId(message.getOrderId())
+                .status(deliveryStatus)
+                .build();
+        DeliveryReservationEntity dbEntity = deliveryReservedRepository.save(entity);
         return dbEntity;
     }
 
     /**
-     *
      * @param orderId - from Order service
-     * @return return false for all orderId divisible by 5.
-     * Example: 5 - false, 10 - false, 2 - true
+     * @return return false for all orderId divisible by 5+3.
+     * Example: 7 - false, 12 - false, 2 - true
      */
-    public boolean reserveProduct(Long orderId) {
+    public boolean deliverProduct(Long orderId) {
         if (orderId < 5) {
             return true;
         }
-        orderId += 4;
-        return (orderId%5L) != 0;
+        orderId += 3;
+        return (orderId % 5L) != 0;
     }
 }
