@@ -18,7 +18,7 @@
 //@SpringBootTest
 //@Slf4j
 //@ActiveProfiles("test")
-//class OrderApplicationTests {
+//class DeliveryApplicationTests {
 //
 //    @Autowired
 //    DeliveryReservedRepository deliveryReservedRepository;
@@ -67,26 +67,26 @@
 //    }
 //
 //    @Test
-//    void paymentRejectedTest() throws InterruptedException {
-//        // setup
-//        PaymentExecutedMessage paymentExecutedMessage = PaymentExecutedMessage.builder()
-//                .orderId(6L) // Reservation will be rejected
-//                .orderDescription("Description of order")
-//                .productId(123L)
-//                .deliveryAddress("г. Москва, пер. Камергерский")
-//                .paymentId(12L)
-//                .build();
-//
-//        // act
-//        kafkaOrderProducer.sendPaymentExecuted(paymentExecutedMessage);
-//
-//        // verify
-//        boolean messageConsumed = kafkaRejectedConsumer.getLatch().await(10, TimeUnit.SECONDS);
-//        long lastProductId = getWarehouseEntity();
-//        assertTrue(messageConsumed);
-//        WarehouseReservationRejectedMessage message = kafkaRejectedConsumer.getRejectedMessage();
-//        assertEquals(message.getOrderId(), 6L);
-//        assertEquals(message.getReservationId(), lastProductId);
-//        assertEquals(message.getErrorCode(), "Order id is 6 or 11 or 21 etc");
-//    }
+////    void paymentRejectedTest() throws InterruptedException {
+////        // setup
+////        PaymentExecutedMessage paymentExecutedMessage = PaymentExecutedMessage.builder()
+////                .orderId(6L) // Reservation will be rejected
+////                .orderDescription("Description of order")
+////                .productId(123L)
+////                .deliveryAddress("г. Москва, пер. Камергерский")
+////                .paymentId(12L)
+////                .build();
+////
+////        // act
+////        kafkaOrderProducer.sendPaymentExecuted(paymentExecutedMessage);
+////
+////        // verify
+////        boolean messageConsumed = kafkaRejectedConsumer.getLatch().await(10, TimeUnit.SECONDS);
+////        long lastProductId = getWarehouseEntity();
+////        assertTrue(messageConsumed);
+////        WarehouseReservationRejectedMessage message = kafkaRejectedConsumer.getRejectedMessage();
+////        assertEquals(message.getOrderId(), 6L);
+////        assertEquals(message.getReservationId(), lastProductId);
+////        assertEquals(message.getErrorCode(), "Order id is 6 or 11 or 21 etc");
+////    }
 //}
