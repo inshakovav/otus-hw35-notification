@@ -2,15 +2,17 @@ package com.example.notification.dto;
 
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @ToString
-public class ProductReservedMessage {
+public class PaymentExecutedMessage {
+    private Long clientId;
     private Long orderId;
-    private String orderDescription;
-    private String deliveryAddress;
-    private Long reservationId;
+    private BigDecimal orderPrice;
+    private Long paymentId;
 }

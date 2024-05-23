@@ -7,7 +7,5 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface DeliveryReservedRepository extends JpaRepository<NotificationEntity, Long> {
-    Optional<NotificationEntity> findFirstByOrderByIdDesc();
-    Optional<NotificationEntity> findFirstByOrderId(Long orderId);
+public interface NotificationRepository extends JpaRepository<NotificationEntity, Long> {
 }

@@ -1,16 +1,11 @@
 server:
   port: 8084
 
-delivery:
+app:
   kafka:
-    message-group-name: delivery-group
-    order-created-topic: hw35.order.created
-    payment-succeeded-topic: hw35.payment.succeeded
+    message-group-name: notification-group
+    payment-executed-topic: hw35.payment.executed
     payment-rejected-topic: hw35.payment.rejected
-    warehouse-product-reserved-topic: hw35.warehouse.product.reserved
-    warehouse-product-reservation-rejected-topic: hw35.warehouse.product.reservation.rejected
-    delivery-executed-topic: hw35.delivery.executed
-    delivery-rejected-topic: hw35.delivery.rejected
 
 spring:
   application:
@@ -24,7 +19,7 @@ spring:
       leak-detection-threshold: 10000
   flyway:
     enabled: true
-    schemas: delivery_scheme
+    schemas: notification_scheme
 
   kafka:
     bootstrap-servers: my-kafka.default.svc.cluster.local:9092
