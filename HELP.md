@@ -6,6 +6,6 @@ docker push alxinsh/docker-java-hw35-delivery:1.0.5
 ```
 
 ### REST-queries
-```
-curl localhost:8084/notification
+```bash
+curl localhost:8084/notification | json_pp
 ```

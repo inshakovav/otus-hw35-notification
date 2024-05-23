@@ -1,6 +1,7 @@
 package com.example.notification.service;
 
 import com.example.notification.dto.PaymentExecutedMessage;
+import com.example.notification.dto.PaymentRejectedMessage;
 import com.example.notification.entity.NotificationEntity;
 import com.example.notification.entity.NotificationType;
 import com.example.notification.repository.NotificationRepository;
@@ -68,4 +69,37 @@ class ApplicationTests {
         assertEquals(expectedOrderPrice, orderPriceRounded);
     }
 
+    @Test
+//    @Disabled
+    void paymentRejectedTest() throws InterruptedException {
+        // setup
+        PaymentRejectedMessage paymentRejectedMessage = PaymentRejectedMessage.builder()
+                .clientId(1L)
+                .orderId(2L)
+                .orderPrice(new BigDecimal(2.1))
+                .paymentId(123L)
+                .errorCode("Insufficient funds in the account")
+                .build();
+
+
+        // act
+        kafkaPaymentProducer.sendPaymentRejected(paymentRejectedMessage);
+
+        // verify
+        sleep(3000);
+        Optional<NotificationEntity> lastNotificationOptional = notificationRepository.findFirstByOrderByIdDesc();
+        if (lastNotificationOptional.isEmpty()) {
+            fail("Notification doesn't saved");
+        }
+        NotificationEntity lastNotification = lastNotificationOptional.get();
+        assertEquals(NotificationType.PAYMENT_REJECTED, lastNotification.getType());
+        assertEquals(1L, lastNotification.getClientId());
+        assertEquals(2L, lastNotification.getOrderId());
+        assertEquals(123L, lastNotification.getPaymentId());
+
+        BigDecimal orderPrice = lastNotification.getOrderPrice();
+        BigDecimal orderPriceRounded = orderPrice.setScale(2, RoundingMode.DOWN);
+        BigDecimal expectedOrderPrice = new BigDecimal(2.1).setScale(2, RoundingMode.DOWN);
+        assertEquals(expectedOrderPrice, orderPriceRounded);
+    }
 }
