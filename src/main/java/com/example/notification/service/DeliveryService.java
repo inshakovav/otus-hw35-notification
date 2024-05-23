@@ -3,8 +3,8 @@ package com.example.notification.service;
 import com.example.notification.dto.DeliveryExecutedMessage;
 import com.example.notification.dto.DeliveryRejectedMessage;
 import com.example.notification.dto.ProductReservedMessage;
-import com.example.notification.entity.DeliveryReservationEntity;
-import com.example.notification.entity.DeliveryStatus;
+import com.example.notification.entity.NotificationEntity;
+import com.example.notification.entity.NotificationType;
 import com.example.notification.kafka.KafkaProducerService;
 import com.example.notification.repository.DeliveryReservedRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,42 +21,42 @@ public class DeliveryService {
 //    private final SageCompensationService sageCompensationService;
 
     public void process(ProductReservedMessage message) {
-        DeliveryReservationEntity deliveryReservationEntity;
+        NotificationEntity notificationEntity;
         boolean isDeliverySuccess = deliverProduct(message.getOrderId());
         if (isDeliverySuccess) {
             log.info("Product successfully delivered: {}", message);
-            deliveryReservationEntity = saveToDb(message, DeliveryStatus.DELIVERED);
-            sendDeliverySucceed(message, deliveryReservationEntity);
+            notificationEntity = saveToDb(message, NotificationType.PAYMENT_EXECUTED);
+            sendDeliverySucceed(message, notificationEntity);
         } else {
             log.warn("Product NOT delivered: {}", message);
-            deliveryReservationEntity = saveToDb(message, DeliveryStatus.REJECTED_BY_DELIVERY);
-            sendDeliveryRejected(message, deliveryReservationEntity);
+            notificationEntity = saveToDb(message, NotificationType.REJECTED_BY_DELIVERY);
+            sendDeliveryRejected(message, notificationEntity);
         }
     }
 
-    private void sendDeliverySucceed(ProductReservedMessage productReservedMessage, DeliveryReservationEntity deliveryReservationEntity) {
+    private void sendDeliverySucceed(ProductReservedMessage productReservedMessage, NotificationEntity notificationEntity) {
         DeliveryExecutedMessage deliveryExecutedMessage = DeliveryExecutedMessage.builder()
                 .orderId(productReservedMessage.getOrderId())
-                .deliveryId(deliveryReservationEntity.getId())
+                .deliveryId(notificationEntity.getId())
                 .build();
         kafkaProducerService.sendDeliveryExecuted(deliveryExecutedMessage);
     }
 
-    private void sendDeliveryRejected(ProductReservedMessage productReservedMessage, DeliveryReservationEntity deliveryReservationEntity) {
+    private void sendDeliveryRejected(ProductReservedMessage productReservedMessage, NotificationEntity notificationEntity) {
         DeliveryRejectedMessage message = DeliveryRejectedMessage.builder()
                 .orderId(productReservedMessage.getOrderId())
-                .deliveryId(deliveryReservationEntity.getId())
+                .deliveryId(notificationEntity.getId())
                 .errorCode("Delivery rejected")
                 .build();
         kafkaProducerService.sendDeliveryRejected(message);
     }
 
-    public DeliveryReservationEntity saveToDb(ProductReservedMessage message, DeliveryStatus deliveryStatus) {
-        DeliveryReservationEntity entity = DeliveryReservationEntity.builder()
+    public NotificationEntity saveToDb(ProductReservedMessage message, NotificationType notificationType) {
+        NotificationEntity entity = NotificationEntity.builder()
                 .orderId(message.getOrderId())
-                .status(deliveryStatus)
+                .status(notificationType)
                 .build();
-        DeliveryReservationEntity dbEntity = deliveryReservedRepository.save(entity);
+        NotificationEntity dbEntity = deliveryReservedRepository.save(entity);
         return dbEntity;
     }
 

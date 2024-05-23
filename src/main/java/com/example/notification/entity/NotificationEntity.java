@@ -5,20 +5,21 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "delivery_reservation", schema = "delivery_scheme")
+@Table(name = "notification", schema = "notification_scheme")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @ToString
-public class DeliveryReservationEntity {
+public class NotificationEntity {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @CreationTimestamp
@@ -28,7 +29,10 @@ public class DeliveryReservationEntity {
     private Timestamp updatedAt;
 
     @Enumerated(EnumType.STRING)
-    private DeliveryStatus status;
+    private NotificationType type;
 
+    private Long clientId;
     private Long orderId;
+    private BigDecimal orderPrice;
+    private Long paymentId;
 }
