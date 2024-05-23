@@ -3,20 +3,15 @@
 
 payment:
   kafka:
-    message-group-name: payment-group-warehouse-test
-    order-created-topic: hw35.order.created-warehouse-test
-    payment-succeeded-topic: hw35.payment.succeeded-warehouse-test
-    payment-rejected-topic: hw35.payment.rejected-warehouse-test
-    warehouse-product-reserved-topic: hw35.warehouse.product.reserved-warehouse-test
-    warehouse-product-reservation-rejected-topic: hw35.warehouse.product.reservation.rejected-warehouse-test
-    delivery-executed-topic: hw35.delivery.executed-warehouse-test
-    delivery-rejected-topic: hw35.delivery.rejected-warehouse-test
+    message-group-name: notification-group-test
+
+    payment-executed-topic: hw35.payment.executed-test
+    payment-rejected-topic: hw35.payment.rejected-test
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5440/db_otus_30
+    url: jdbc:postgresql://localhost:5440/db_otus_35
     username: postgres
     password: postgres
-#  flyway:
-#    enabled: true
-#    schemas: scheme
+  kafka:
+    bootstrap-servers: localhost:29092
