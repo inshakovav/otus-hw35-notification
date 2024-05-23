@@ -1,4 +1,4 @@
-CREATE TABLE delivery_scheme.delivery_reservation
+CREATE TABLE notification_scheme.notification
 (
     id         bigserial,
     created_at timestamp NOT NULL,

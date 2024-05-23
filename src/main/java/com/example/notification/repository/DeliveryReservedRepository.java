@@ -1,6 +1,6 @@
-package com.example.payment.repository;
+package com.example.notification.repository;
 
-import com.example.payment.entity.DeliveryReservationEntity;
+import com.example.notification.entity.DeliveryReservationEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

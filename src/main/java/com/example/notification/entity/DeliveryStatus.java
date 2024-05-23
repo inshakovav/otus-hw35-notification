@@ -1,4 +1,4 @@
-package com.example.payment.entity;
+package com.example.notification.entity;
 
 public enum DeliveryStatus {
     DELIVERED,

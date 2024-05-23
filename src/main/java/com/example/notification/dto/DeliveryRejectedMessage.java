@@ -1,4 +1,4 @@
-package com.example.payment.dto;
+package com.example.notification.dto;
 
 import lombok.*;
 
@@ -8,7 +8,8 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @ToString
-public class DeliveryExecutedMessage {
+public class DeliveryRejectedMessage {
     private Long orderId;
     private Long deliveryId;
+    private String errorCode;
 }

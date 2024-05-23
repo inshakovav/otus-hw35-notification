@@ -4,13 +4,13 @@
 payment:
   kafka:
     message-group-name: payment-group-warehouse-test
-    order-created-topic: hw30.order.created-warehouse-test
-    payment-succeeded-topic: hw30.payment.succeeded-warehouse-test
-    payment-rejected-topic: hw30.payment.rejected-warehouse-test
-    warehouse-product-reserved-topic: hw30.warehouse.product.reserved-warehouse-test
-    warehouse-product-reservation-rejected-topic: hw30.warehouse.product.reservation.rejected-warehouse-test
-    delivery-executed-topic: hw30.delivery.executed-warehouse-test
-    delivery-rejected-topic: hw30.delivery.rejected-warehouse-test
+    order-created-topic: hw35.order.created-warehouse-test
+    payment-succeeded-topic: hw35.payment.succeeded-warehouse-test
+    payment-rejected-topic: hw35.payment.rejected-warehouse-test
+    warehouse-product-reserved-topic: hw35.warehouse.product.reserved-warehouse-test
+    warehouse-product-reservation-rejected-topic: hw35.warehouse.product.reservation.rejected-warehouse-test
+    delivery-executed-topic: hw35.delivery.executed-warehouse-test
+    delivery-rejected-topic: hw35.delivery.rejected-warehouse-test
 
 spring:
   datasource:

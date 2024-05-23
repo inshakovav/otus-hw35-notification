@@ -1,7 +1,7 @@
-package com.example.payment.kafka;
+package com.example.notification.kafka;
 
-import com.example.payment.dto.DeliveryExecutedMessage;
-import com.example.payment.dto.DeliveryRejectedMessage;
+import com.example.notification.dto.DeliveryExecutedMessage;
+import com.example.notification.dto.DeliveryRejectedMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;

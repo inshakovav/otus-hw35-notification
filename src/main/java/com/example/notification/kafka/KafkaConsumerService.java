@@ -1,7 +1,7 @@
-package com.example.payment.kafka;
+package com.example.notification.kafka;
 
-import com.example.payment.dto.ProductReservedMessage;
-import com.example.payment.service.DeliveryService;
+import com.example.notification.dto.ProductReservedMessage;
+import com.example.notification.service.DeliveryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;

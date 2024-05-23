@@ -1,4 +1,4 @@
-package com.example.payment.service;
+package com.example.notification.service;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
