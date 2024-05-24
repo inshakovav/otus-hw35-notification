@@ -7,6 +7,6 @@ CREATE TABLE notification_scheme.notification
     client_id   integer        NOT NULL,
     order_id    integer        NOT NULL,
     order_price numeric(10, 2) NOT NULL DEFAULT 0,
-    payment_id  integer        NOT NULL
+    payment_id  integer
 );
 

@@ -41,10 +41,10 @@ class ApplicationTests {
     void paymentSucceededTest() throws InterruptedException {
         // setup
         PaymentExecutedMessage paymentExecutedMessage = PaymentExecutedMessage.builder()
-                .clientId(1L)
-                .orderId(2L)
+                .accountId(1L)
+                .orderId(3L)
                 .orderPrice(new BigDecimal(2.1))
-                .paymentId(123L)
+//                .paymentId(123L)
                 .build();
 
 
@@ -60,8 +60,8 @@ class ApplicationTests {
         NotificationEntity lastNotification = lastNotificationOptional.get();
         assertEquals(NotificationType.PAYMENT_EXECUTED, lastNotification.getType());
         assertEquals(1L, lastNotification.getClientId());
-        assertEquals(2L, lastNotification.getOrderId());
-        assertEquals(123L, lastNotification.getPaymentId());
+        assertEquals(3L, lastNotification.getOrderId());
+//        assertEquals(123L, lastNotification.getPaymentId());
 
         BigDecimal orderPrice = lastNotification.getOrderPrice();
         BigDecimal orderPriceRounded = orderPrice.setScale(2, RoundingMode.DOWN);
@@ -74,10 +74,10 @@ class ApplicationTests {
     void paymentRejectedTest() throws InterruptedException {
         // setup
         PaymentRejectedMessage paymentRejectedMessage = PaymentRejectedMessage.builder()
-                .clientId(1L)
+                .accountId(1L)
                 .orderId(2L)
                 .orderPrice(new BigDecimal(2.1))
-                .paymentId(123L)
+//                .paymentId(123L)
                 .errorCode("Insufficient funds in the account")
                 .build();
 
@@ -95,11 +95,20 @@ class ApplicationTests {
         assertEquals(NotificationType.PAYMENT_REJECTED, lastNotification.getType());
         assertEquals(1L, lastNotification.getClientId());
         assertEquals(2L, lastNotification.getOrderId());
-        assertEquals(123L, lastNotification.getPaymentId());
+//        assertEquals(123L, lastNotification.getPaymentId());
 
         BigDecimal orderPrice = lastNotification.getOrderPrice();
         BigDecimal orderPriceRounded = orderPrice.setScale(2, RoundingMode.DOWN);
         BigDecimal expectedOrderPrice = new BigDecimal(2.1).setScale(2, RoundingMode.DOWN);
         assertEquals(expectedOrderPrice, orderPriceRounded);
+    }
+
+    @Test
+    void testDB() {
+        Optional<NotificationEntity> firstByOrderByIdDesc = notificationRepository.findFirstByOrderByIdDesc();
+        if (firstByOrderByIdDesc.isPresent()) {
+            NotificationEntity entity = firstByOrderByIdDesc.get();
+            log.info("Last by id: {}", entity);
+        }
     }
 }

@@ -19,10 +19,10 @@ public class NotificationService {
     public void paymentExecuted(PaymentExecutedMessage message) {
         NotificationEntity entity = NotificationEntity.builder()
                 .type(NotificationType.PAYMENT_EXECUTED)
-                .clientId(message.getClientId())
+                .clientId(message.getAccountId())
                 .orderId(message.getOrderId())
                 .orderPrice(message.getOrderPrice())
-                .paymentId(message.getPaymentId())
+//                .paymentId(message.getPaymentId())
                 .build();
         notificationRepository.save(entity);
     }
@@ -30,10 +30,10 @@ public class NotificationService {
     public void paymentRejected(PaymentRejectedMessage message) {
         NotificationEntity entity = NotificationEntity.builder()
                 .type(NotificationType.PAYMENT_REJECTED)
-                .clientId(message.getClientId())
+                .clientId(message.getAccountId())
                 .orderId(message.getOrderId())
                 .orderPrice(message.getOrderPrice())
-                .paymentId(message.getPaymentId())
+//                .paymentId(message.getPaymentId())
                 .build();
         notificationRepository.save(entity);
     }
