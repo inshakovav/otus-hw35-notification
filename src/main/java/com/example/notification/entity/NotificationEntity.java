@@ -34,5 +34,4 @@ public class NotificationEntity {
     private Long clientId;
     private Long orderId;
     private BigDecimal orderPrice;
-    private Long paymentId;
 }

@@ -6,7 +6,7 @@ CREATE TABLE notification_scheme.notification
     type        text           NOT NULL,
     client_id   integer        NOT NULL,
     order_id    integer        NOT NULL,
-    order_price numeric(10, 2) NOT NULL DEFAULT 0,
-    payment_id  integer
+    order_price numeric(10, 2) NOT NULL DEFAULT 0
+--         CONSTRAINT pk_notification_id PRIMARY KEY (id)
 );
 

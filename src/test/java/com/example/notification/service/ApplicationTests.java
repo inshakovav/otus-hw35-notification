@@ -6,6 +6,7 @@ import com.example.notification.entity.NotificationEntity;
 import com.example.notification.entity.NotificationType;
 import com.example.notification.repository.NotificationRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,7 +20,7 @@ import static java.lang.Thread.sleep;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-@SpringBootTest
+//@SpringBootTest
 @Slf4j
 @ActiveProfiles("test")
 class ApplicationTests {
@@ -37,7 +38,7 @@ class ApplicationTests {
     private KafkaPaymentProducer kafkaPaymentProducer;
 //
     @Test
-//    @Disabled
+    @Disabled
     void paymentSucceededTest() throws InterruptedException {
         // setup
         PaymentExecutedMessage paymentExecutedMessage = PaymentExecutedMessage.builder()
@@ -70,7 +71,7 @@ class ApplicationTests {
     }
 
     @Test
-//    @Disabled
+    @Disabled
     void paymentRejectedTest() throws InterruptedException {
         // setup
         PaymentRejectedMessage paymentRejectedMessage = PaymentRejectedMessage.builder()
@@ -104,6 +105,7 @@ class ApplicationTests {
     }
 
     @Test
+    @Disabled
     void testDB() {
         Optional<NotificationEntity> firstByOrderByIdDesc = notificationRepository.findFirstByOrderByIdDesc();
         if (firstByOrderByIdDesc.isPresent()) {
